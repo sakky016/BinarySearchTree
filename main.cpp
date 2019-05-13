@@ -1,85 +1,67 @@
-#include "bst.h"
+#include"bst.h"
+#include"random.h"
 
-void displayBSTdata(BST<int> &tree)
+//----------------------------------------------------------------------------------------------
+// Configurations
+//----------------------------------------------------------------------------------------------
+#define MANUAL_TEST
+const int NUMBER_RANGE = 500;
+const int REPEATS = 100;
+
+//----------------------------------------------------------------------------------------------
+// M A I N
+//----------------------------------------------------------------------------------------------
+int main()
 {
-    printf("\n");
+    RandomGenerator rng;
 
-    printf("In Order:\n");
-    tree.display(INORDER);
-
-    printf("Pre Order:\n");
-    tree.display(PREORDER);
-
-    printf("Post Order:\n");
-    tree.display(POSTORDER);
-
-    printf("Level Order:\n");
-    tree.display(LEVELORDER);
-
-    printf("Level Order level by level:\n");
-    tree.display(LEVELORDER_LEVEL_BY_LEVEL);
-
-    printf("Tree height: %d\n", tree.height());
-}
-
-int main(int argc, char *argv[])
-{
-    if (argc < 2)
     {
-        printf("Specify the numbers to insert\n");
-        return 0;
-    }
+        BST bst;
 
-    BST<int> tree;
-    int values = argc - 1;
-    int i = 1;
+#ifdef MANUAL_TEST
+        bst.Insert(50);
+        bst.Insert(40);
+        bst.Insert(30);
+        bst.Insert(45);
+        bst.Insert(78);
+        bst.Insert(88);
+        bst.Insert(80);
+        bst.Insert(90);
 
-    while (i < argc)
-    {
-        printf("Inserting %d...\n", atoi(argv[i]));
-        tree.insertNode(atoi(argv[i]));
-        i++;
-    }/* End of insertion */
-    cout<<endl;
-    
-    printf("leaf node and their root's data:\n");
-    tree.printRootAndLeafNodes();
+        cout << bst.IsValuePresent(50) << endl;
+        cout << bst.IsValuePresent(80) << endl;
+        cout << bst.IsValuePresent(90) << endl;
+        cout << bst.IsValuePresent(10) << endl;
 
-    displayBSTdata(tree);
-
-    while (1)
-    {
-        int val = 0;
-        bool retval = false;
-
-        cout<<"Enter val to find: ";
-        cin>>val;
-        retval = tree.findNode(val);
-        if (retval == true)
+        bst.Delete(45);
+        bst.Delete(30);
+        bst.Delete(10);
+        bst.Delete(78);
+        bst.Delete(88);
+#else
+        for (int i = 0; i < REPEATS; i++)
         {
-            printf(" %d found\n", val);
+            int val = rng.generateRandomNumber(NUMBER_RANGE);
+            printf("\nInsert [%d]\n", val);
+            bst.Insert(val);
         }
-        else
-        {
-            printf(" %d NOT found\n", val);
-        }
+#endif
 
-        cout<<"\nEnter val to delete: ";
-        cin>>val;
-        retval = tree.deleteNode(val);
-        if (retval == true)
-        {
-            printf(" Deleted\n");
-            displayBSTdata(tree);
-        }
-        else
-        {
-            printf(" %d not found\n", val);
-        }
+        printf("\n");
+        printf("BST size   : %lu elements\n", bst.Size());
+        printf("\n");
+        printf("BST height : %d\n", bst.Height());
 
-        break;
-    }/* end of while loop */
+        printf("\n\nIn Order:\n");
+        bst.Display(INORDER);
+        printf("\n\nPre Order:\n");
+        bst.Display(PREORDER);
+        printf("\n\nPost Order:\n");
+        bst.Display(POSTORDER);
+        printf("\n\nLevel Order:\n");
+        bst.Display(LEVELORDER);
 
+    }//End of scope of bst variable
 
-    return 0;
+    getchar();
 }
